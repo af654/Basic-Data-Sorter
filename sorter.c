@@ -3,8 +3,12 @@
 #include "Sorter.h"
 #include "mergesort.c"
 
+#define MAX_NUM_ROWS 8192
+
 int main(int argc, char* argv[]) {
-	//test case 1: make sure that if file 1 is empty it prints out 0
+    //array to hold the rows read in from stdin
+    struct row rows[MAX_NUM_ROWS];
+
 	if ( argc != 3 
         || strcmp(argv[1],"-c") != 0) {
         printf("The command line must follow the following format:\ncat input.file | ./sorter -c  movie_title");
@@ -12,43 +16,24 @@ int main(int argc, char* argv[]) {
         printf("%s is not a valid column type. Please consult documentation for list of proper columns.",argv[2]);
     }
 
-    //name of csv file and open it
-	char* name = argv[1]; 
-    FILE* file;
-	file = fopen(name, "r");
+    //Loop through STDIN and use the implemented getline() to get the whole line to put into an allocated row struct.
+    for(int i = 0; i < 10; i++) { //change from 5 to valid once fully implmented
+        char *line = NULL;
+        char *token;        
+        const char s[1] = ",";
+        size_t size;
 
-	//if file does not exist 
-	if(!file){
-		printf("error\n");
-		return 1;
-	}
-
-	//creating a new csv file means making a 2D array of 28 columns and a certain amount of rows
-	//malloc for 28 "column" structs and put them into an array (each 28*1)
-	//and then for each one malloc for 1000 nodes (so now it's 28*1000)
-	//28*100 at first and then realloc if we need to -> 28*1000 etc
-	struct row *oneDarray=malloc(sizeof(struct row));
-
-	char line[28];
-	char buff[64];
-	//go through csv line by line and read into each separate linked list 
-	while(fgets(line,  buff, file)){
-
-		//end of file
-		if(feof(file)){
-			printf("%d\n", counter);
-	  		break;
-	  	}
-
-	  	//tracing through csv
-	  	//not going to be 28 nor 1000 idek how to go through it if we dont know the set number of rows
-	  	for(int column = 0; column < 28; column++) {
-	  		for(int row = 0; row < 1000; row++){
-
-	  		} //end of inner for
-	  	} //end of outer for
-
-	} //end of while
+        getline(&line, &size, stdin);        
+        //Uses the stdlib strtok function which splits up the string based on an character.
+        //Becuase it is a CSV file we split between the commas
+        token = strtok(line, s);
+        
+        /* walk through other tokens */
+        while( token != NULL ) {
+            printf( "%s\n", token );
+            token = strtok(NULL, s);
+        }
+    }
 } //end of main
 
 //const array is put in the header file, input string is compared against names found there.
@@ -60,4 +45,57 @@ int isValidColumn(char* columnName) {
         }
     }
     return 0;
+}
+
+//getline is a POSIX function, however on windows machines this is not availible. Below is an implementation of get line which return the line.
+size_t getline(char **lineptr, size_t *n, FILE *stream) {
+    char *bufptr = NULL;
+    char *p = bufptr;
+    size_t size;
+    int c;
+
+    if (lineptr == NULL) {
+        return -1;
+    }
+    if (stream == NULL) {
+        return -1;
+    }
+    if (n == NULL) {
+        return -1;
+    }
+    bufptr = *lineptr;
+    size = *n;
+
+    c = fgetc(stream);
+    if (c == EOF) {
+        return -1;
+    }
+    if (bufptr == NULL) {
+        bufptr = malloc(128);
+        if (bufptr == NULL) {
+            return -1;
+        }
+        size = 128;
+    }
+    p = bufptr;
+    while(c != EOF) {
+        if ((p - bufptr) > (size - 1)) {
+            size = size + 128;
+            bufptr = realloc(bufptr, size);
+            if (bufptr == NULL) {
+                return -1;
+            }
+        }
+        *p++ = c;
+        if (c == '\n') {
+            break;
+        }
+        c = fgetc(stream);
+    }
+
+    *p++ = '\0';
+    *lineptr = bufptr;
+    *n = size;
+
+    return p - bufptr - 1;
 }

@@ -7,7 +7,9 @@
 ******/
 
 int isValidColumn(char* x);
-
+size_t getline(char **lineptr, size_t *n, FILE *stream);
+size_t parseline(char **lineptr, size_t *n, FILE *stream);
+    
 const char* validColums[] = {
     "color",
     "director_name",
@@ -39,8 +41,7 @@ const char* validColums[] = {
     "movie_facebook_likes"};
 
     //Suggestion: define a struct that mirrors a record (row) of the data set
-typedef struct row
-{
+struct row {
 	char* color; 
 	char* director_name;
 	int num_critic_for_reviews;
