@@ -41,7 +41,7 @@ const char* validColumns[] = {
     "movie_facebook_likes"};
 
     //Suggestion: define a struct that mirrors a record (row) of the data set
-struct row {
+typedef struct row {
     //I believe reading in all values as char* gives the most flexibility as the values read in are a mix of strings, ints and doubles.
     //We can use strcmp and it should work functionally just as well for values that are true strings, and values that are just numbers.
     char* filmColor;
@@ -72,6 +72,6 @@ struct row {
     char* imdb_score;
     char* aspect_ratio;
     char* movie_facebook_likes;
-};
+}Row;
 
 //Suggestion: prototype a mergesort function

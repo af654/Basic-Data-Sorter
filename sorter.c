@@ -7,11 +7,11 @@
 #define MAX_NUM_COL 30
 
 //array to hold the rows read in from stdin -> im not sure if we need an array here 
-struct row rows[MAX_NUM_ROWS];
+Row rows[MAX_NUM_ROWS];
 //store types 
 char types[MAX_NUM_COLS];
-//firstdata is a pointer to an array of char*s of size 10
-char* (*point_to_row)[MAX_NUM_ROWS];
+//point_to_row is a an array of pointers 
+Row* point_to_row[MAX_NUM_ROWS];
 
 int main(int argc, char* argv[]) {
 
@@ -56,7 +56,9 @@ int main(int argc, char* argv[]) {
             } else {
                 //implementation: for each row malloc for 30 column structs 
                 //malloc for 30 column structs ie allocating space for data
-                rows[i] = (char **)malloc(MAX_NUM_COL*sizeof(char *));
+                //malloc returns a pointer to some allocated memory and we have to populate it 
+                //I DONT KNOW IF IM DOING THIS RIGHT AHHHHHHHHH
+                rows[i] = (char*)malloc(MAX_NUM_COL*sizeof(char *));
                 //a pointer pointing to the front of this line which is allocated for 30 columns
                 //ie storing the starting address of the row to the pointer variable firstdata
                 point_to_row[i] = &rows[i]; 
@@ -78,13 +80,15 @@ int main(int argc, char* argv[]) {
                 strcpy(rows[i].directorFacebookLikes,value);
 
                 //do this for all values
-                //do we need to realloc for more space in the rows array? Because right now it is constant
+                //do we need to realloc for more space in the rows array? Because right now it is constantrrr
             }
-            //mergesort(rows)
-            //print out types array
-            //print out rows sorted
-
         }//end of while
+
+        //mergesort(array that holds data for the input column) and spits out order to move the rows
+        //sort rows by pointers pointing to each row
+        //print out types array
+        //print out rows sorted
+
     }//end of else
 } //end of main
 
