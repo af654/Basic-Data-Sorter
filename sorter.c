@@ -4,43 +4,76 @@
 #include "mergesort.c"
 
 #define MAX_NUM_ROWS 8192
+#define MAX_NUM_COL 30
 
 int main(int argc, char* argv[]) {
     //array to hold the rows read in from stdin
-    struct row rows[MAX_NUM_ROWS];
+    struct row types[MAX_NUM_ROWS];
+    //firstdata is a pointer to an array of char*s of size MAX_NUM_COLS
+    char* (*firstdata)[10];
 
-	if ( argc != 3 
-        || strcmp(argv[1],"-c") != 0) {
+	if ( argc != 3 || strcmp(argv[1],"-c") != 0) {
         printf("The command line must follow the following format:\ncat input.file | ./sorter -c  movie_title");
     } else if (!isValidColumn(argv[2])) {
         printf("%s is not a valid column type. Please consult documentation for list of proper columns.",argv[2]);
-    }
+    } else {
+        //Loop through STDIN and use the implemented getline() to get the whole line to put into an allocated row struct.
+        //while not at the end of the file (might not know how many rows you have)
+        while(!feof(stdin)){ 
+            int i = 0;
+            char *line = NULL;
+            char *value;        
+            const char s[1] = ",";
+            size_t size;
 
-    //Loop through STDIN and use the implemented getline() to get the whole line to put into an allocated row struct.
-    for(int i = 0; i < 10; i++) { //change from 5 to valid once fully implmented
-        char *line = NULL;
-        char *token;        
-        const char s[1] = ",";
-        size_t size;
+            //GET DATA
+            getline(&line, &size, stdin);        
 
-        getline(&line, &size, stdin);        
-        //Uses the stdlib strtok function which splits up the string based on an character.
-        //Becuase it is a CSV file we split between the commas
-        token = strtok(line, s);
-        
-        /* walk through other tokens */
-        while( token != NULL ) {
-            printf( "%s\n", token );
-            token = strtok(NULL, s);
-        }
-    }
+            //store types 
+            char types[MAX_NUM_COLS];
+            if(i==0){
+                //Uses the stdlib strtok function which splits up the string based on a character.
+                //Because it is a CSV file we split between the commas
+                //PARSE DATA AND STORE DATA
+                value = strtok(line, s);
+                //put types in type array
+                types[0]=malloc(strlen(value) + 1);
+                strcpy(types[0], value);
+                /* walk through other values */
+                //don't use \n because that gives them into new lines 
+                int j = 1;
+                while( value != NULL ) {
+                    printf( "%s", value );
+                    value = strtok(NULL, s);
+                    j++;
+                    //printing them but we have to store them 
+                    types[j] = malloc(strlen(value) + 1);
+                    rows(types[j], value);
+                }
+                i++;
+            } else {
+                //malloc for 30 column structs 
+                //ALLOCATE SPACE FOR DATA
+                rows = (char **)malloc(MAX_NUM_COL*sizeof(char *));
+                //a pointer pointing to the front of this line which is allocated for 30 columns
+                //POINTER TO EACH ROW TO KEEP TRACK
+                //firstdata[0] points to the first string in the row of the 2-D array
+
+                //PARSE DATA AND STORE EACH DATA
+            }
+            //mergesort(rows)
+            //print out types array
+            //print out rows sorted
+
+        }//end of while
+    }//end of else
 } //end of main
 
 //const array is put in the header file, input string is compared against names found there.
 //returns 1 if the input  is a valid column that can be searched, 0 otherwise
 int isValidColumn(char* columnName) {
-    for(int i = 0; i < (sizeof(validColums) / sizeof(validColums[i])); i++){
-        if(strcmp(validColums[i], columnName) == 0) {
+    for(int i = 0; i < (sizeof(validColumns) / sizeof(validColumns[i])); i++){
+        if(strcmp(validColumns[i], columnName) == 0) {
             return 1;
         }
     }
