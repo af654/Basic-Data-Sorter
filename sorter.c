@@ -6,13 +6,14 @@
 #define MAX_NUM_ROWS 8192
 #define MAX_NUM_COL 30
 
+//array to hold the rows read in from stdin -> im not sure if we need an array here 
+struct row rows[MAX_NUM_ROWS];
+//store types 
+char types[MAX_NUM_COLS];
+//firstdata is a pointer to an array of char*s of size 10
+char* (*point_to_row)[MAX_NUM_ROWS];
+
 int main(int argc, char* argv[]) {
-    //array to hold the rows read in from stdin -> im not sure if we need an array here 
-    struct row rows[MAX_NUM_ROWS];
-    //firstdata is a pointer to an array of char*s of size MAX_NUM_COLS
-    char* (*firstdata)[10];
-    //store types 
-    char types[MAX_NUM_COLS];
 
 	if ( argc != 3 || strcmp(argv[1],"-c") != 0) {
         printf("The command line must follow the following format:\ncat input.file | ./sorter -c  movie_title");
@@ -46,23 +47,38 @@ int main(int argc, char* argv[]) {
                 while( value != NULL ) {
                     printf( "%s", value );
                     value = strtok(NULL, s);
-                    j++;
-                    //printing them but we have to store them 
                     types[j] = malloc(strlen(value) + 1);
                     strcpy(types[j], value);
+                    j++;
                 }
                 i++;
             //the rest of the rows you have to store differently
             } else {
-                //malloc for 30 column structs 
-                //ALLOCATE SPACE FOR DATA
-                rows = (char **)malloc(MAX_NUM_COL*sizeof(char *));
+                //implementation: for each row malloc for 30 column structs 
+                //malloc for 30 column structs ie allocating space for data
+                rows[i] = (char **)malloc(MAX_NUM_COL*sizeof(char *));
                 //a pointer pointing to the front of this line which is allocated for 30 columns
-                //POINTER TO EACH ROW TO KEEP TRACK
+                //ie storing the starting address of the row to the pointer variable firstdata
+                point_to_row[i] = &rows[i]; 
                 //firstdata[0] points to the first string in the row of the 2-D array
+                //PARSE DATA AND STORE EACH DATA 
                 rows[i].color = malloc(strlen(value) + 1);
                 strcpy(rows[i].color, value);
-                //PARSE DATA AND STORE EACH DATA
+
+                rows[i].directorName = malloc(strlen(value)+1);
+                strcpy(rows[i].directorName, value);
+
+                rows[i].numCriticForReview = malloc(strlen(value)+1);
+                strcpy(rows[i].numCriticForReview, value);
+                
+                rows[i].duration = malloc(strlen(value)+1);
+                strcpy(rows[i].duration,value);
+
+                rows[i].directorFacebookLikes = malloc(strlen(value)+1);
+                strcpy(rows[i].directorFacebookLikes,value);
+
+                //do this for all values
+                //do we need to realloc for more space in the rows array? Because right now it is constant
             }
             //mergesort(rows)
             //print out types array
