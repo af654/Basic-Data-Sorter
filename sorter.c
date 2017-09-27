@@ -7,10 +7,12 @@
 #define MAX_NUM_COL 30
 
 int main(int argc, char* argv[]) {
-    //array to hold the rows read in from stdin
-    struct row types[MAX_NUM_ROWS];
+    //array to hold the rows read in from stdin -> im not sure if we need an array here 
+    struct row rows[MAX_NUM_ROWS];
     //firstdata is a pointer to an array of char*s of size MAX_NUM_COLS
     char* (*firstdata)[10];
+    //store types 
+    char types[MAX_NUM_COLS];
 
 	if ( argc != 3 || strcmp(argv[1],"-c") != 0) {
         printf("The command line must follow the following format:\ncat input.file | ./sorter -c  movie_title");
@@ -29,8 +31,7 @@ int main(int argc, char* argv[]) {
             //GET DATA
             getline(&line, &size, stdin);        
 
-            //store types 
-            char types[MAX_NUM_COLS];
+            //if first line put into type array
             if(i==0){
                 //Uses the stdlib strtok function which splits up the string based on a character.
                 //Because it is a CSV file we split between the commas
@@ -48,9 +49,10 @@ int main(int argc, char* argv[]) {
                     j++;
                     //printing them but we have to store them 
                     types[j] = malloc(strlen(value) + 1);
-                    rows(types[j], value);
+                    strcpy(types[j], value);
                 }
                 i++;
+            //the rest of the rows you have to store differently
             } else {
                 //malloc for 30 column structs 
                 //ALLOCATE SPACE FOR DATA
@@ -58,7 +60,8 @@ int main(int argc, char* argv[]) {
                 //a pointer pointing to the front of this line which is allocated for 30 columns
                 //POINTER TO EACH ROW TO KEEP TRACK
                 //firstdata[0] points to the first string in the row of the 2-D array
-
+                rows[i].color = malloc(strlen(value) + 1);
+                strcpy(rows[i].color, value);
                 //PARSE DATA AND STORE EACH DATA
             }
             //mergesort(rows)
