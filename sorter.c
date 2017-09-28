@@ -10,8 +10,7 @@ int main(int argc, char* argv[]) {
     struct Row *rows[MAX_NUM_ROWS];
     int row_number = 0;    
 
-	if ( argc != 3 
-        || strcmp(argv[1],"-c") != 0) {
+	if ( argc != 3 || strcmp(argv[1],"-c") != 0) {
         printf("The command line must follow the following format:\ncat input.file | ./sorter -c  movie_title");
         return 0;
     } else if (!isValidColumn(argv[2])) {
@@ -33,11 +32,13 @@ int main(int argc, char* argv[]) {
 
         //Walk through other tokens on the line
         while(token) {
+            //If the value we are reading in is Null, we want to replace it with the string "<EMPTY>"
             value = *token ? token : "<EMPTY>";
             
             //Assign values to spots in the values array
             current_row_values[value_index] = value;
 
+            //Prints token, REMOVE IN FINAL IMPLEMENTATION
             printf( "%s\n", value);
             token = strtok_single(NULL, s);
             value_index++;
@@ -47,8 +48,6 @@ int main(int argc, char* argv[]) {
 
         row_number++;
     } //end of while
-
-    
 }//end of main
 
 //*rows[], is the array of the row pointers that will be added to

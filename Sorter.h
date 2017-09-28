@@ -72,7 +72,7 @@ struct Row {
     char* imdb_score;
     char* aspect_ratio;
     char* movie_facebook_likes;
-};
+}Row;
 
 struct Row * AssignRowValues(struct Row **rows, char **row_values_array, int row_num);
 
