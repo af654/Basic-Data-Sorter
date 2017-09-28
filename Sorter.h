@@ -7,8 +7,8 @@
 ******/
 
 int isValidColumn(char* x);
-size_t getline(char **lineptr, size_t *n, FILE *stream);
-size_t parseline(char **lineptr, size_t *n, FILE *stream);
+size_t parseline(char** lineptr, size_t *n, FILE *stream);
+char* strtok_single(char* str, char const* delims);
     
 const char* validColumns[] = {
     "color",
@@ -41,15 +41,15 @@ const char* validColumns[] = {
     "movie_facebook_likes"};
 
     //Suggestion: define a struct that mirrors a record (row) of the data set
-typedef struct row {
+struct Row {
     //I believe reading in all values as char* gives the most flexibility as the values read in are a mix of strings, ints and doubles.
     //We can use strcmp and it should work functionally just as well for values that are true strings, and values that are just numbers.
-    char* filmColor;
-    char* directorName;
-    char* numCriticForReview;
+    char* color;
+    char* director_name;
+    char* num_critic_for_reviews;
     char* duration;
-    char* directorFacebookLikes;
-    char* actor3FacebookLikes;
+    char* director_facebook_likes;
+    char* actor_3_facebook_likes;
     char* actor_2_name;
     char* actor_1_facebook_likes;
     char* gross;
@@ -73,5 +73,7 @@ typedef struct row {
     char* aspect_ratio;
     char* movie_facebook_likes;
 }Row;
+
+struct Row * AssignRowValues(struct Row **rows, char **row_values_array, int row_num);
 
 //Suggestion: prototype a mergesort function
