@@ -4,43 +4,98 @@
 #include "mergesort.c"
 
 #define MAX_NUM_ROWS 8192
+#define MAX_NUM_COLS 64
 
 int main(int argc, char* argv[]) {
-    //array to hold the rows read in from stdin
-    struct row rows[MAX_NUM_ROWS];
+    struct Row *rows[MAX_NUM_ROWS];
+    int row_number = 0;    
 
 	if ( argc != 3 
         || strcmp(argv[1],"-c") != 0) {
         printf("The command line must follow the following format:\ncat input.file | ./sorter -c  movie_title");
+        return 0;
     } else if (!isValidColumn(argv[2])) {
         printf("%s is not a valid column type. Please consult documentation for list of proper columns.",argv[2]);
+        return 0;
     }
-
-    //Loop through STDIN and use the implemented getline() to get the whole line to put into an allocated row struct.
-    for(int i = 0; i < 10; i++) { //change from 5 to valid once fully implmented
-        char *line = NULL;
-        char *token;        
+    //Loop through STDIN and use the implemented parseline() to get the whole line to put into an allocated row struct.
+    while(!feof(stdin)) {
+        char* line = NULL;
         const char s[1] = ",";
+        char* value;  
+        char* token;
+        char* current_row_values[MAX_NUM_COLS];
         size_t size;
-
-        getline(&line, &size, stdin);        
-        //Uses the stdlib strtok function which splits up the string based on an character.
-        //Becuase it is a CSV file we split between the commas
-        token = strtok(line, s);
         
-        /* walk through other tokens */
-        while( token != NULL ) {
-            printf( "%s\n", token );
-            token = strtok(NULL, s);
+        int value_index = 0;
+        parseline(&line, &size, stdin);  
+        token = strtok_single(line, s);
+
+        //Walk through other tokens on the line
+        while(token) {
+            value = *token ? token : "<EMPTY>";
+            
+            //Assign values to spots in the values array
+            current_row_values[value_index] = value;
+
+            printf( "%s\n", value);
+            token = strtok_single(NULL, s);
+            value_index++;
         }
-    }
-} //end of main
+        //This will assign the data parsed from STDIN to a valid memory allocated row structure.
+        rows[row_number] = AssignRowValues(rows, current_row_values, row_number);
+
+        row_number++;
+    } //end of while
+
+    
+}//end of main
+
+//*rows[], is the array of the row pointers that will be added to
+//char* row_values are the values grabbed from stdin that must be assigned and alllocated 
+//n is the number of the row that we are inserting to
+//The function returns a pointer to the row we have just created. This pointer will be assigned back into the *rows array.
+struct Row * AssignRowValues(struct Row *rows[], char* row_values[], int n) {
+    rows[n] = malloc(sizeof (struct Row)); 
+    
+    rows[n] -> color = row_values[0];
+    rows[n] -> director_name = row_values[1];
+    rows[n] -> num_critic_for_reviews = row_values[2];
+    rows[n] -> duration = row_values[3];
+    rows[n] -> director_facebook_likes = row_values[4];
+    rows[n] -> actor_3_facebook_likes= row_values[5];
+    rows[n] -> actor_2_name = row_values[6];
+    rows[n] -> actor_1_facebook_likes = row_values[7];
+    rows[n] -> gross = row_values[8];
+    rows[n] -> genres = row_values[9];
+    rows[n] -> actor_1_name = row_values[10];
+    rows[n] -> movie_title = row_values[11];
+    rows[n] -> num_voted_users = row_values[12];
+    rows[n] -> cast_total_facebook_likes = row_values[13];
+    rows[n] -> actor_3_name = row_values[14];
+    rows[n] -> facenumber_in_poster = row_values[15];
+    rows[n] -> plot_keywords = row_values[16];
+    rows[n] -> movie_imdb_link = row_values[17];
+    rows[n] -> num_user_for_reviews = row_values[18];
+    rows[n] -> language = row_values[19];
+    rows[n] -> country = row_values[20];
+    rows[n] -> content_rating = row_values[21];
+    rows[n] -> budget = row_values[22];
+    rows[n] -> title_year = row_values[23];
+    rows[n] -> actor_2_facebook_likes = row_values[24];
+    rows[n] -> imdb_score = row_values[25];
+    rows[n] -> aspect_ratio = row_values[26];
+    rows[n] -> movie_facebook_likes = row_values[27];
+    
+    return rows[n];
+}
 
 //const array is put in the header file, input string is compared against names found there.
 //returns 1 if the input  is a valid column that can be searched, 0 otherwise
 int isValidColumn(char* columnName) {
-    for(int i = 0; i < (sizeof(validColums) / sizeof(validColums[i])); i++){
-        if(strcmp(validColums[i], columnName) == 0) {
+    int i;
+    for(i = 0; i < (sizeof(validColumns) / sizeof(validColumns[i])); i++){
+        if(strcmp(validColumns[i], columnName) == 0) {
             return 1;
         }
     }
@@ -48,7 +103,7 @@ int isValidColumn(char* columnName) {
 }
 
 //getline is a POSIX function, however on windows machines this is not availible. Below is an implementation of get line which return the line.
-size_t getline(char **lineptr, size_t *n, FILE *stream) {
+size_t parseline(char **lineptr, size_t *n, FILE *stream) {
     char *bufptr = NULL;
     char *p = bufptr;
     size_t size;
@@ -98,4 +153,30 @@ size_t getline(char **lineptr, size_t *n, FILE *stream) {
     *n = size;
 
     return p - bufptr - 1;
+}
+
+//This is based off of the typical strtok implmentation found in the standard library.
+//Instead this implementation will return NULL if there is no matching character.
+//Thus if the delim iters are next to eachother the function returns NULL, and can be addressed
+char* strtok_single (char * str, char const * delims) {
+  static char  * src = NULL;
+  char  *  p,  * ret = 0;
+
+  if (str != NULL)
+    src = str;
+
+  if (src == NULL)
+    return NULL;
+
+  if ((p = strpbrk (src, delims)) != NULL) {
+    *p  = 0;
+    ret = src;
+    src = ++p;
+
+  } else if (*src) {
+    ret = src;
+    src = NULL;
+  }
+
+  return ret;
 }
