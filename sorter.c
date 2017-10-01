@@ -67,22 +67,25 @@ int main(int argc, char* argv[]) {
     //make a new array and send that to mergesort
 
     //array of data to sort for mergesort
-    char datatosort[MAX_NUM_ROWS];
-
-    for(int i =0; i < MAX_NUM_ROWS; i++){
-        datatosort[i] = rows[column_number_to_sort][i].column_to_sort;
+    char *datatosort[MAX_NUM_ROWS];
+    int j;
+    for(j = 0; j < MAX_NUM_ROWS; j++){
+        datatosort[j] = GetRowColumnValue(rows,j,column_number_to_sort);
     }
 
     //now we should have the order for how to sort the rows
     //mergesort input: char data array for data in column specified
     //mergesort output: int order array for how to move rows around
-    mergeSort(datatosort[]);
+    int * order;
+    order = mergeSort(datatosort);
 
     //using datatosort then use that order to print out the rows
     int line_number;
     //function to print out the 2D array of information for each movie
-    for(int i = 0; i < MAX_NUM_ROWS; i++){
-        for(int col = 0; col < MAX_NUM_COLS; col++){
+    int i;
+    for(i = 0; i < MAX_NUM_ROWS; i++){
+        int col;
+        for(col = 0; col < MAX_NUM_COLS; col++){
             line_number = datatosort[i];
             printf("%c\t", rows[line_number][col]);
         }
@@ -96,6 +99,69 @@ int main(int argc, char* argv[]) {
 //char* row_values are the values grabbed from stdin that must be assigned and alllocated 
 //n is the number of the row that we are inserting to
 //The function returns a pointer to the row we have just created. This pointer will be assigned back into the *rows array.
+
+char* GetRowColumnValue(struct Row *rows[], int i, int j) {
+    switch (j) {
+        case 0:
+            return (*rows[i]).color;
+        case 1:
+            return (*rows[i]).director_name;
+        case 2:
+            return (*rows[i]).num_critic_for_reviews;
+        case 3:
+            return (*rows[i]).duration;
+        case 4:
+            return (*rows[i]).director_facebook_likes;
+        case 5:
+            return (*rows[i]).actor_3_facebook_likes;
+        case 6:
+            return (*rows[i]).actor_2_name;
+        case 7:
+            return (*rows[i]).actor_1_facebook_likes;
+        case 8:
+            return (*rows[i]).gross;
+        case 9:
+            return (*rows[i]).genres;
+        case 10:
+            return (*rows[i]).actor_1_name;
+        case 11:
+            return (*rows[i]).movie_title;
+        case 12:
+            return (*rows[i]).num_voted_users;
+        case 13:
+            return (*rows[i]).cast_total_facebook_likes;
+        case 14:
+            return (*rows[i]).actor_3_name;    
+        case 15:
+            return (*rows[i]).facenumber_in_poster;    
+        case 16:
+            return (*rows[i]).plot_keywords;    
+        case 17:
+            return (*rows[i]).movie_imdb_link;    
+        case 18:
+            return (*rows[i]).num_user_for_reviews;    
+        case 19:
+            return (*rows[i]).language;    
+        case 20:
+            return (*rows[i]).country;    
+        case 21:
+            return (*rows[i]).content_rating;    
+        case 22:
+            return (*rows[i]).budget;    
+        case 23:
+            return (*rows[i]).title_year;    
+        case 24:
+            return (*rows[i]).actor_2_facebook_likes;    
+        case 25:
+            return (*rows[i]).imdb_score;    
+        case 26:
+            return (*rows[i]).aspect_ratio;    
+        case 27:
+            return (*rows[i]).movie_facebook_likes;    
+        default:
+            return (*rows[i]).movie_title;
+        }
+}
 
 struct Row * AssignRowValues(struct Row *rows[], char* row_values[], int n) {
     rows[n] = malloc(sizeof (struct Row)); 

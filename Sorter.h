@@ -11,7 +11,7 @@ size_t parseline(char** lineptr, size_t *n, FILE *stream);
 char* strtok_single(char* str, char const* delims);
 
 //Suggestion: prototype a mergesort function
-int * mergeSort(char arr[]);
+int * mergeSort(char** arr);
 void sort(int left, int right);
 void merging(int left, int middle, int right);
     
@@ -80,5 +80,6 @@ typedef struct Row {
 }Row;
 
 struct Row * AssignRowValues(struct Row **rows, char **row_values_array, int row_num);
+char* GetRowColumnValue(struct Row **rows, int i, int j);
 //Suggestion: prototype a mergesort function
 

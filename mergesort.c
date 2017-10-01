@@ -1,7 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "Sorter.h"
+
+#define MAX_NUM_ROWS 8192
+#define MAX_NUM_COLS 64
 
 //merge function
 //mergesort function
@@ -10,20 +12,21 @@ char* sortedarr;
 //temp array for mergesort
 char* temp;
 //order array holds order 
-int order[8192]; 
+int order[MAX_NUM_ROWS]; 
 
 //declare mergeSort returning a pointer to a single-dimension array of ints "order"
-int * mergeSort(char arr[]){
+int * mergeSort(char** arr) {
 	//malloc for space for sortedarr
-	sortedarr = malloc (8192*sizeof(char));
+	sortedarr = malloc (MAX_NUM_ROWS * sizeof(char));
 	//transfer contents from array to sorted array
-	for(int i =0; i < sizeof(arr[]); i++){
-		sortedarr[i] = (char *)malloc(sizeof(strlen(arr[i])+1));
+	int i;
+	for(i = 0; i < sizeof(arr); i++) {
+		sortedarr[i] = (char*) malloc(sizeof(strlen(arr[i])+1));
 		strcpy(sortedarr,arr[i]);
 	}
 
 	int left = 0;
-	int right = sizeof(sortedarr[]);
+	int right = (sizeof(sortedarr)/sizeof(sortedarr[0]));
 	sort(left, right);
 
 	free(sortedarr);
