@@ -80,3 +80,5 @@ typedef struct Row {
 }Row;
 
 struct Row * AssignRowValues(struct Row **rows, char **row_values_array, int row_num);
+//Suggestion: prototype a mergesort function
+

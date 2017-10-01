@@ -11,7 +11,7 @@ int main(int argc, char* argv[]) {
     Row *rows[MAX_NUM_ROWS];
     int row_number = 0;   
     char* column_to_sort; 
-    int column_number_to_sort;
+    int column_number_to_sort; 
 
     if ( argc != 3 || strcmp(argv[1],"-c") != 0) {
         printf("The command line must follow the following format:\ncat input.file | ./sorter -c  movie_title");
@@ -90,15 +90,15 @@ int main(int argc, char* argv[]) {
     }
 
     free(rows);
-
 }//end of main
 
 //*rows[], is the array of the row pointers that will be added to
 //char* row_values are the values grabbed from stdin that must be assigned and alllocated 
 //n is the number of the row that we are inserting to
 //The function returns a pointer to the row we have just created. This pointer will be assigned back into the *rows array.
-struct Row * AssignRowValues(Row *rows[], char* row_values[], int n) {
-    rows[n] = malloc(sizeof (Row)); 
+
+struct Row * AssignRowValues(struct Row *rows[], char* row_values[], int n) {
+    rows[n] = malloc(sizeof (struct Row)); 
     
     rows[n] -> color = row_values[0];
     rows[n] -> director_name = row_values[1];
