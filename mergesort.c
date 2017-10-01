@@ -19,7 +19,7 @@ int * mergeSort(char arr[]){
 	//transfer contents from array to sorted array
 	for(int i =0; i < sizeof(arr[]); i++){
 		sortedarr[i] = (char *)malloc(sizeof(strlen(arr[i])+1));
-		strcpy(sortedarr,arr[i]);
+		strcpy(sortedarr[i],arr[i]);
 	}
 
 	int left = 0;
@@ -58,16 +58,20 @@ void merging(int left, int middle, int right) {
    	//use strcmp with doubles, ints, and strings
       if(strcmp(tolower(sortedarr[first]),tolower(sortedarr[second])) <= 0) {
          temp[i] = sortedarr[first++];
+         order[i] = first++;
       } else {
          temp[i] = sortedarr[second++];
+         order[i] = second++;
       }
    }
    
    while(first <= middle)
       temp[i++] = sortedarr[first++];
+  	  order[i++] = first++;
 
    while(second <= right)   
       temp[i++] = sortedarr[second++];
+  	  order[i++] = second++;
 
    for(i = left; i <= right; i++)
       sortedarr[i] = temp[i];

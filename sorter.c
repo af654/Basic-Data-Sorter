@@ -70,7 +70,7 @@ int main(int argc, char* argv[]) {
     char datatosort[MAX_NUM_ROWS];
 
     for(int i =0; i < MAX_NUM_ROWS; i++){
-        datatosort[i] = rows[column_number_to_sort][i].column_to_sort;
+        datatosort[i] = rows[i][column_number_to_sort].column_to_sort;
     }
 
     //now we should have the order for how to sort the rows
