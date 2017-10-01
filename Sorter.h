@@ -43,7 +43,8 @@ const char* validColumns[] = {
     "actor_2_facebook_likes",
     "imdb_score",
     "aspect_ratio",
-    "movie_facebook_likes"};
+    "movie_facebook_likes"
+};
 
 //Suggestion: define a struct that mirrors a record (row) of the data set
 typedef struct Row {
@@ -77,8 +78,9 @@ typedef struct Row {
     char* imdb_score;
     char* aspect_ratio;
     char* movie_facebook_likes;
-}Row;
+} Row;
 
 struct Row * AssignRowValues(struct Row **rows, char **row_values_array, int row_num);
+char* GetRowColumnValue(struct Row **rows, int i, int j);
 //Suggestion: prototype a mergesort function
 

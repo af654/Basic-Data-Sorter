@@ -1,12 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "Sorter.h"
 
 //merge function
 //mergesort function
 //sortedarr holds data
-char* sortedarr;
+char** sortedarr;
 //temp array for mergesort
 char* temp;
 //order array holds order 
@@ -14,16 +13,16 @@ int order[8192];
 
 //declare mergeSort returning a pointer to a single-dimension array of ints "order"
 int * mergeSort(char arr[]){
-	//malloc for space for sortedarr
-	sortedarr = malloc (8192*sizeof(char));
+
 	//transfer contents from array to sorted array
-	for(int i =0; i < sizeof(arr[]); i++){
-		sortedarr[i] = (char *)malloc(sizeof(strlen(arr[i])+1));
+	for(int i = 0; i < ( sizeof(arr) / sizeof(arr[i])); i++){
+		sortedarr[i] = (char*) malloc(sizeof(strlen(arr[i])+1));
 		strcpy(sortedarr[i],arr[i]);
 	}
 
 	int left = 0;
-	int right = sizeof(sortedarr[]);
+	//check whether this right is valid
+	int right = sizeof(*sortedarr) / sizeof(sortedarr[0]);
 	sort(left, right);
 
 	free(sortedarr);
@@ -49,7 +48,6 @@ void sort(int left, int right){
 }
 
 //conquer the data 
-//STILL NEED TO POPULATE THE ORDER ARRAY
 void merging(int left, int middle, int right) {
 	int first, second, i;
 	int row_number = 1;
@@ -65,14 +63,18 @@ void merging(int left, int middle, int right) {
       }
    }
    
-   while(first <= middle)
-      temp[i++] = sortedarr[first++];
-  	  order[i++] = first++;
+	while(first <= middle) {
+		temp[i++] = sortedarr[first++];
+		order[i++] = first++;
+	}
 
-   while(second <= right)   
-      temp[i++] = sortedarr[second++];
-  	  order[i++] = second++;
+	while(second <= right) {
+		temp[i++] = sortedarr[second++];
+		order[i++] = second++;
+	}
 
-   for(i = left; i <= right; i++)
-      sortedarr[i] = temp[i];
+	for(i = left; i <= right; i++) {
+		sortedarr[i] = temp[i];
+	}
+
 }
