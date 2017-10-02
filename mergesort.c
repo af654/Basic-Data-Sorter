@@ -4,77 +4,66 @@
 
 //merge function
 //mergesort function
-//sortedarr holds data
-char** sortedarr;
-//temp array for mergesort
-char* temp;
+
 //order array holds order 
 int order[8192]; 
 
 //declare mergeSort returning a pointer to a single-dimension array of ints "order"
-int * mergeSort(char arr[]){
-
-	//transfer contents from array to sorted array
-	for(int i = 0; i < ( sizeof(arr) / sizeof(arr[i])); i++){
-		sortedarr[i] = (char*) malloc(sizeof(strlen(arr[i])+1));
-		strcpy(sortedarr[i],arr[i]);
-	}
+int * mergeSort(char *arr[], int ValidRowCount) {
 
 	int left = 0;
 	//check whether this right is valid
-	int right = sizeof(*sortedarr) / sizeof(sortedarr[0]);
-	sort(left, right);
-
-	free(sortedarr);
-	free(temp);
+	int right = ValidRowCount - 1;
+	sort(arr, left, right);
 
 	return order;
 }
 
 //sort the data which is whatever type specified
 //divide data
-void sort(int left, int right){
+void sort(char *arr[],int left, int right){
 	int middle;
 	//sort first and second halfs
 	//merge them together 
 	if(left < right) {
 		middle = (left + right)/2;
-		sort(left,middle);
-		sort(middle+1, right);
-		merging(left,middle,right);
+		sort(arr,left,middle);
+		sort(arr,middle+1, right);
+		merging(arr,left,middle,right);
 	} else {
 		return;
 	}
 }
 
 //conquer the data 
-void merging(int left, int middle, int right) {
+void merging(char *arr[],int left, int middle, int right) {
 	int first, second, i;
 	int row_number = 1;
+	char *temp[sizeof(arr)-1];
 
    for(first = left, second = middle + 1, i = left; first <= middle && second <= right; i++) {
    	//use strcmp with doubles, ints, and strings
-      if(strcmp(tolower(sortedarr[first]),tolower(sortedarr[second])) <= 0) {
-         temp[i] = sortedarr[first++];
-         order[i] = first++;
+      if(strcmp(tolower(arr[first]),tolower(arr[second])) <= 0) {
+        order[i] = first;		
+		temp[i] = arr[first++]; 
       } else {
-         temp[i] = sortedarr[second++];
-         order[i] = second++;
+        order[i] = second;		
+		temp[i] = arr[second++]; 
       }
    }
    
 	while(first <= middle) {
-		temp[i++] = sortedarr[first++];
-		order[i++] = first++;
+		order[i] = first;		
+		temp[i++] = arr[first++];
 	}
 
 	while(second <= right) {
-		temp[i++] = sortedarr[second++];
-		order[i++] = second++;
+		order[i] = second;
+		temp[i++] = arr[second++];
 	}
 
 	for(i = left; i <= right; i++) {
-		sortedarr[i] = temp[i];
+		arr[i] = temp[i];
 	}
 
 }

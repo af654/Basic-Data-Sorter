@@ -6,10 +6,12 @@
 #define MAX_NUM_ROWS 8192
 #define MAX_NUM_COLS 64
 
+int ValidRowCount = 0;
+int ValidColumnCount = 0;
+
 int main(int argc, char* argv[]) {
     //2D array of structs
     Row *rows[MAX_NUM_ROWS];
-    int row_number = 0;   
     char* column_to_sort; 
     int column_number_to_sort; 
 
@@ -41,7 +43,8 @@ int main(int argc, char* argv[]) {
         size_t size;
         
         int value_index = 0;
-        parseline(&line, &size, stdin);  
+        parseline(&line, &size, stdin); 
+        ValidRowCount++;        
         token = strtok_single(line, s);
 
         //Walk through other tokens on the line
@@ -53,44 +56,52 @@ int main(int argc, char* argv[]) {
             current_row_values[value_index] = value;
 
             //Prints token, REMOVE IN FINAL IMPLEMENTATION
-            printf( "%s\n", value);
             token = strtok_single(NULL, s);
             value_index++;
         }
         //This will assign the data parsed from STDIN to a valid memory allocated row structure.
-        rows[row_number] = AssignRowValues(rows, current_row_values, row_number);
+        rows[ValidColumnCount] = AssignRowValues(rows, current_row_values, ValidColumnCount);
 
-        row_number++;
+        ValidColumnCount++;
     } //end of while
 
     //go to each row and access the column_number_to_sort
     //make a new array and send that to mergesort
     //array of data to sort for mergesort
-    
-    char *datatosort[MAX_NUM_ROWS];
+    char *datatosort[5];
     int j;
-    for(j = 0; j < MAX_NUM_ROWS; j++){
+    for(j = 0; j < ValidRowCount; j++){
         datatosort[j] = GetRowColumnValue(rows,j,column_number_to_sort);
     }
 
     //now we should have the order for how to sort the rows
     //mergesort input: char data array for data in column specified
     //mergesort output: int order array for how to move rows around
-    mergeSort(*datatosort);
+    int *properOrder = mergeSort(datatosort, ValidRowCount);
 
     //using datatosort then use that order to print out the rows
     int line_number;
     //function to print out the 2D array of information for each movie
-    for(int i = 0; i < MAX_NUM_ROWS; i++){
-        for(int col = 0; col < MAX_NUM_COLS; col++){
-            line_number = datatosort[i];
-            printf("%c\t", rows[line_number][col]);
-        }
+    int i;
+    for(i = 0; i < ValidRowCount; i++){
+        printRowToCSV(rows, i);
         printf("\n");
     }
 
-    free(rows);
+    for(i = 0; i < ValidRowCount; i++) {
+        free(rows[i]);
+    }
+    return 0;   
 }//end of main
+
+void printRowToCSV(Row *rows, int i) {
+    int j;
+    for (int j = 0; j < ; j++) {
+        char *value = GetRowColumnValue(rows,i,j);  
+        //printf(value+",")      
+    }
+    
+}
 
 //*rows[], is the array of the row pointers that will be added to
 //char* row_values are the values grabbed from stdin that must be assigned and alllocated 

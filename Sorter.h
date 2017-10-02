@@ -10,10 +10,11 @@ int isValidColumn(char* x);
 size_t parseline(char** lineptr, size_t *n, FILE *stream);
 char* strtok_single(char* str, char const* delims);
 
+
 //Suggestion: prototype a mergesort function
-int * mergeSort(char arr[]);
-void sort(int left, int right);
-void merging(int left, int middle, int right);
+int * mergeSort(char *arr[], int ValidRowCount);
+void sort(char *arr[], int left, int right);
+void merging(char *arr[], int left, int middle, int right);
     
 const char* validColumns[] = {
     "color",
@@ -80,6 +81,7 @@ typedef struct Row {
     char* movie_facebook_likes;
 } Row;
 
+void printRowToCSV(struct Row **rows,int i);
 struct Row * AssignRowValues(struct Row **rows, char **row_values_array, int row_num);
 char* GetRowColumnValue(struct Row **rows, int i, int j);
 //Suggestion: prototype a mergesort function
