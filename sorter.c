@@ -3,7 +3,7 @@
 #include "Sorter.h"
 #include "mergesort.c"
 
-#define MAX_NUM_ROWS 8192
+#define MAX_NUM_ROWS 5044
 #define MAX_NUM_COLS 64
 
 int ValidRowCount = 0;
@@ -86,6 +86,9 @@ int main(int argc, char* argv[]) {
     //mergesort output: int order array for how to move rows around
     properOrder = mergeSort(datatosort, ValidRowCount - 1);
     
+    //print top bar to CSV
+    printf("color,director_name,num_critic_for_reviews,duration,director_facebook_likes,actor_3_facebook_likes,actor_2_name,actor_1_facebook_likes,gross,genres,actor_1_name,movie_title,num_voted_users,cast_total_facebook_likes,actor_3_name,facenumber_in_poster,plot_keywords,movie_imdb_link,num_user_for_reviews,language,country,content_rating,budget,title_year,actor_2_facebook_likes,imdb_score,aspect_ratio,movie_facebook_likes\n");
+
     for(i = 0; i < ValidRowCount - 1; i++){
         struct Row *correctRow = rows[properOrder[i]];
         printRowToCSV(correctRow, i);
