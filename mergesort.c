@@ -2,19 +2,28 @@
 #include <stdio.h>
 #include <string.h>
 
-//merge function
-//mergesort function
-
-//order array holds order 
-int order[8192]; 
+int order[8192];
+int tempOrder[8192];  
+char *temp[8192];	
 
 //declare mergeSort returning a pointer to a single-dimension array of ints "order"
 int * mergeSort(char *arr[], int ValidRowCount) {
-
+	int n;
 	int left = 0;
 	//check whether this right is valid
 	int right = ValidRowCount - 1;
+
+	//populate the order with ints 1, 2...,n
+	for(n = left; n <= right; n++) {
+		order[n] = n;
+		tempOrder[n] = n;
+	}
 	sort(arr, left, right);
+
+	for(n = left; n <= right; n++) {
+		arr[n] = temp[n];		
+		order[n] = tempOrder[n];
+	}
 
 	return order;
 }
@@ -38,32 +47,40 @@ void sort(char *arr[],int left, int right){
 //conquer the data 
 void merging(char *arr[],int left, int middle, int right) {
 	int first, second, i;
-	int row_number = 1;
-	char *temp[sizeof(arr)-1];
-
+	
    for(first = left, second = middle + 1, i = left; first <= middle && second <= right; i++) {
-   	//use strcmp with doubles, ints, and strings
+	//use strcmp with doubles, ints, and strings
       if(strcmp(tolower(arr[first]),tolower(arr[second])) <= 0) {
-        order[i] = first;		
-		temp[i] = arr[first++]; 
+		int swap = tempOrder[i];
+		tempOrder[i] = tempOrder[first];
+		tempOrder[first] = swap;
+		if(temp[first] != NULL) {
+			temp[i] = temp[first++]; 			
+		} else {
+			temp[i] = arr[first++]; 			
+		}
       } else {
-        order[i] = second;		
-		temp[i] = arr[second++]; 
+		int swap = tempOrder[i];
+		tempOrder[i] = tempOrder[second];
+		tempOrder[second] = swap;
+		if(temp[second] != NULL) {
+			temp[i] = temp[second++]; 			
+		} else {
+			temp[i] = arr[second++]; 			
+		}
       }
    }
    
 	while(first <= middle) {
-		order[i] = first;		
+		int swap = tempOrder[middle];
+		tempOrder[middle] = order[first];
+		tempOrder[first] = swap;
 		temp[i++] = arr[first++];
 	}
 
 	while(second <= right) {
-		order[i] = second;
+		tempOrder[i] = order[second];
 		temp[i++] = arr[second++];
-	}
-
-	for(i = left; i <= right; i++) {
-		arr[i] = temp[i];
 	}
 
 }

@@ -10,10 +10,12 @@ int ValidRowCount = 0;
 int ValidColumnCount = 0;
 
 int main(int argc, char* argv[]) {
-    //2D array of structs
+    int i,j,n;
+    int column_number_to_sort; 
+    int *properOrder;
     Row *rows[MAX_NUM_ROWS];
     char* column_to_sort; 
-    int column_number_to_sort; 
+    char *datatosort[MAX_NUM_ROWS];            
 
     if ( argc != 3 || strcmp(argv[1],"-c") != 0) {
         printf("The command line must follow the following format:\ncat input.file | ./sorter -c  movie_title");
@@ -25,10 +27,9 @@ int main(int argc, char* argv[]) {
 
     column_to_sort = argv[2];
     //search function on validcolumns
-    int num;
-    for(num = 0; num < (sizeof(validColumns) / sizeof(validColumns[num])); num++){
-        if(strcmp(validColumns[num], column_to_sort) == 0) {
-            column_number_to_sort = num;
+    for(n = 0; n < (sizeof(validColumns) / sizeof(validColumns[n])); n++){
+        if(strcmp(validColumns[n], column_to_sort) == 0) {
+            column_number_to_sort = n;
             break;
         }
     }
@@ -36,16 +37,24 @@ int main(int argc, char* argv[]) {
     //Loop through STDIN and use the implemented parseline() to get the whole line to put into an allocated row struct.
     while(!feof(stdin)) {
         char* line = NULL;
-        const char s[1] = ",";
         char* value;  
         char* token;
         char* current_row_values[MAX_NUM_COLS];
+        int value_index = 0;        
         size_t size;
+
+        if(ValidColumnCount > 0 && rows[ValidColumnCount - 1] == 0x0) {
+            break;
+        }
         
-        int value_index = 0;
-        parseline(&line, &size, stdin); 
+        parseline(&line, &size, stdin);
+        //Skip the first row
+        if(ValidRowCount == 0) {
+            line = NULL;
+            parseline(&line, &size, stdin);
+        }
         ValidRowCount++;        
-        token = strtok_single(line, s);
+        token = strtok_single(line, ",");
 
         //Walk through other tokens on the line
         while(token) {
@@ -55,60 +64,117 @@ int main(int argc, char* argv[]) {
             //Assign values to spots in the values array
             current_row_values[value_index] = value;
 
-            //Prints token, REMOVE IN FINAL IMPLEMENTATION
-            token = strtok_single(NULL, s);
+            //Tokenizes the string based on ','
+            token = strtok_single(NULL, ",\n");
             value_index++;
         }
         //This will assign the data parsed from STDIN to a valid memory allocated row structure.
-        rows[ValidColumnCount] = AssignRowValues(rows, current_row_values, ValidColumnCount);
-
+        rows[ValidColumnCount] = assignRowValues(rows, current_row_values, ValidColumnCount);
+        
         ValidColumnCount++;
     } //end of while
 
     //go to each row and access the column_number_to_sort
     //make a new array and send that to mergesort
     //array of data to sort for mergesort
-    char *datatosort[5];
-    int j;
-    for(j = 0; j < ValidRowCount; j++){
-        datatosort[j] = GetRowColumnValue(rows,j,column_number_to_sort);
+    for(j = 0; j < ValidRowCount - 1; j++){
+        datatosort[j] = getRowColumnValue(rows,j,column_number_to_sort);
     }
 
     //now we should have the order for how to sort the rows
     //mergesort input: char data array for data in column specified
     //mergesort output: int order array for how to move rows around
-    int *properOrder = mergeSort(datatosort, ValidRowCount);
-
-    //using datatosort then use that order to print out the rows
-    int line_number;
-    //function to print out the 2D array of information for each movie
-    int i;
-    for(i = 0; i < ValidRowCount; i++){
-        printRowToCSV(rows, i);
-        printf("\n");
+    properOrder = mergeSort(datatosort, ValidRowCount - 1);
+    
+    for(i = 0; i < ValidRowCount - 1; i++){
+        struct Row *correctRow = rows[properOrder[i]];
+        printRowToCSV(correctRow, i);
     }
 
     for(i = 0; i < ValidRowCount; i++) {
         free(rows[i]);
     }
-    return 0;   
+
 }//end of main
 
-void printRowToCSV(Row *rows, int i) {
-    int j;
-    for (int j = 0; j < ; j++) {
-        char *value = GetRowColumnValue(rows,i,j);  
-        //printf(value+",")      
+void printRowToCSV(struct Row *correctRow, int rowIndex) {
+    int c = 0;
+    for (c = 0; c < 27; c++) {
+        printf("%s", getSingleRowValues(correctRow, c));
+        printf(",");
+    } 
+    printf("%s", getSingleRowValues(correctRow, c));    
+}
+
+//This first overload will work on a single row, and return the assignments for that row
+char* getSingleRowValues(struct Row *row, int columnIndex) {
+    switch (columnIndex) {
+        case 0:
+            return row -> color;
+        case 1:
+            return row -> director_name;
+        case 2:
+            return row -> num_critic_for_reviews;
+        case 3:
+            return row -> duration;
+        case 4:
+            return row -> director_facebook_likes;
+        case 5:
+            return row -> actor_3_facebook_likes;
+        case 6:
+            return row -> actor_2_name;
+        case 7:
+            return row -> actor_1_facebook_likes;
+        case 8:
+            return row -> gross;
+        case 9:
+            return row -> genres;
+        case 10:
+            return row -> actor_1_name;
+        case 11:
+            return row -> movie_title;
+        case 12:
+            return row -> num_voted_users;
+        case 13:
+            return row -> cast_total_facebook_likes;
+        case 14:
+            return row -> actor_3_name;    
+        case 15:
+            return row -> facenumber_in_poster;    
+        case 16:
+            return row -> plot_keywords;    
+        case 17:
+            return row -> movie_imdb_link;    
+        case 18:
+            return row -> num_user_for_reviews;    
+        case 19:
+            return row -> language;    
+        case 20:
+            return row -> country;    
+        case 21:
+            return row -> content_rating;    
+        case 22:
+            return row -> budget;    
+        case 23:
+            return row -> title_year;    
+        case 24:
+            return row -> actor_2_facebook_likes;    
+        case 25:
+            return row -> imdb_score;    
+        case 26:
+            return row -> aspect_ratio;    
+        case 27:
+            return row -> movie_facebook_likes;    
+        default:
+            return row -> movie_title;
     }
-    
 }
 
 //*rows[], is the array of the row pointers that will be added to
 //char* row_values are the values grabbed from stdin that must be assigned and alllocated 
 //n is the number of the row that we are inserting to
 //The function returns a pointer to the row we have just created. This pointer will be assigned back into the *rows array.
-
-char* GetRowColumnValue(struct Row *rows[], int i, int j) {
+char* getRowColumnValue(struct Row *rows[], int i, int j) {
     switch (j) {
         case 0:
             return (*rows[i]).color;
@@ -171,7 +237,11 @@ char* GetRowColumnValue(struct Row *rows[], int i, int j) {
         }
 }
 
-struct Row * AssignRowValues(struct Row *rows[], char* row_values[], int n) {
+struct Row * assignRowValues(struct Row *rows[], char* row_values[], int n) {
+    //We want to throw out duplications of movies based on title
+    if(n != 0 && strcmp(row_values[11], rows[n-1] -> movie_title) == 0) {
+        return 0x0;
+    }
     rows[n] = malloc(sizeof (struct Row)); 
     
     rows[n] -> color = row_values[0];
@@ -227,7 +297,7 @@ size_t parseline(char **lineptr, size_t *n, FILE *stream) {
 
     if (lineptr == NULL) {
         return -1;
-    }
+    } 
     if (stream == NULL) {
         return -1;
     }
@@ -242,11 +312,11 @@ size_t parseline(char **lineptr, size_t *n, FILE *stream) {
         return -1;
     }
     if (bufptr == NULL) {
-        bufptr = malloc(128);
+        bufptr = malloc(4096);
         if (bufptr == NULL) {
             return -1;
         }
-        size = 128;
+        size = 4096;
     }
     p = bufptr;
     while(c != EOF) {
@@ -267,32 +337,23 @@ size_t parseline(char **lineptr, size_t *n, FILE *stream) {
     *p++ = '\0';
     *lineptr = bufptr;
     *n = size;
-
+    
     return p - bufptr - 1;
 }
 
 //This is based off of the typical strtok implmentation found in the standard library.
 //Instead this implementation will return NULL if there is no matching character.
-//Thus if the delim iters are next to eachother the function returns NULL, and can be addressed
-char* strtok_single (char * str, char const * delims) {
-  static char  * src = NULL;
-  char  *  p,  * ret = 0;
-
-  if (str != NULL)
-    src = str;
-
-  if (src == NULL)
-    return NULL;
-
-  if ((p = strpbrk (src, delims)) != NULL) {
-    *p  = 0;
-    ret = src;
-    src = ++p;
-
-  } else if (*src) {
-    ret = src;
-    src = NULL;
-  }
-
-  return ret;
+//Thus if the delimiters are next to eachother the function returns NULL, and can be addressed
+char* strtok_single (char * string, char const * delimiter) {
+    static char *source = NULL;
+    char *p, *result = 0;
+    if(string != NULL)         source = string;
+    if(source == NULL)         return NULL;
+ 
+    if((p = strpbrk (source, delimiter)) != NULL) {
+       *p  = 0;
+       result = source;
+       source = ++p;
+    }
+ return result;
 }
