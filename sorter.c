@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
     int *properOrder;
     Row *rows[MAX_NUM_ROWS];
     char* column_to_sort; 
-    char *datatosort[MAX_NUM_ROWS];            
+    char *datatosort[MAX_NUM_ROWS];
 
     if ( argc != 3 || strcmp(argv[1],"-c") != 0) {
         printf("The command line must follow the following format:\ncat input.file | ./sorter -c  movie_title");
@@ -58,6 +58,18 @@ int main(int argc, char* argv[]) {
 
         //Walk through other tokens on the line
         while(token) {
+            int input_type = findType(token);
+
+            if(input_type == 0) { //Input is an integer
+
+            } else if (input_type == 1 ) { //Input is a string
+                
+            } else if (input_type == 2){ //Input is a double
+
+            } else { //Input is not a valid type
+
+            }
+            
             //If the value we are reading in is Null, we want to replace it with the string "<EMPTY>"
             value = *token ? token : "<EMPTY>";
             
@@ -72,6 +84,7 @@ int main(int argc, char* argv[]) {
         rows[ValidColumnCount] = assignRowValues(rows, current_row_values, ValidColumnCount);
         
         ValidColumnCount++;
+        
     } //end of while
 
     //go to each row and access the column_number_to_sort
@@ -359,4 +372,19 @@ char* strtok_single (char * string, char const * delimiter) {
        source = ++p;
     }
  return result;
+}
+
+int findType(char* token) {
+    int length,i; 
+
+    length = strlen (token);
+    for (i = 0; i < length; i++) {
+        //If a character is not a digit but it is also not a period it must be a string
+        if (!isdigit(token[i]) && token[i] != '.') {
+            return 1;
+        } else { //otherwise it is a double
+            return 2;
+        } 
+    } //If we never encounter a non-numerical it must be an integer
+    return 0;
 }

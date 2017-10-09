@@ -7,15 +7,15 @@ char *temp[5044];
 
 //declare mergeSort returning a pointer to a single-dimension array of ints "order"
 int * mergeSort(char *arr[], int ValidRowCount) {
-	int i;
+	int i,left,right;
 	char **unsorted = malloc(sizeof(char *) * ValidRowCount);
 	for (i = 0; i < ValidRowCount; i++) {
 		unsorted[i] = malloc(strlen(arr[i]));
 		strcpy(unsorted[i],arr[i]);
 	}
 
-	int left = 0;
-	int right = ValidRowCount - 1;
+	left = 0;
+	right = ValidRowCount - 1;
 
 	sort(arr, left, right);
 
