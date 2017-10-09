@@ -7,7 +7,7 @@ char *temp[5044];
 
 //declare mergeSort returning a pointer to a single-dimension array of ints "order"
 int * mergeSort(char *arr[], int ValidRowCount) {
-	int i,left,right;
+	int i,left,right,k,l;
 	char **unsorted = malloc(sizeof(char *) * ValidRowCount);
 	for (i = 0; i < ValidRowCount; i++) {
 		unsorted[i] = malloc(strlen(arr[i]));
@@ -20,20 +20,24 @@ int * mergeSort(char *arr[], int ValidRowCount) {
 	sort(arr, left, right);
 
 	//take the contents of temp (which is the sorted arr) and compare them to unsorted arr 
-	int k=0;
+	k = 0;
 	for(i = 0; i < ValidRowCount; i++){
 		int j = 0;
 		for(j = 0; j < ValidRowCount; j++){
-			//if they are the same string
+			//if they are the same string and this film hasnt been found yet
 			if(strcmp(tolower(arr[i]),tolower(unsorted[j])) == 0) {
-				//order[k] = (int *)malloc(sizeof(int));
+				//Convert the index to a string and tage it with the index.
+				//A string tagged with its index has been removed. 
+				char str[12];
+				sprintf(str, "%d", j);
+				unsorted[j] = strcat(unsorted[j], str);
 				order[k] = j;
 				k++;
 				break;
 			}
 		}
 	}
-	int l;
+
 	for (l = 0; l < ValidRowCount; l++) {
 		free(unsorted[l]);
 	}
