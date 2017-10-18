@@ -3,10 +3,14 @@
 #include <string.h>
 
 int order[5044];
-char *temp[5044];	
+char *temp[5044];
+char* colType;
+int colIdx;
 
 //declare mergeSort returning a pointer to a single-dimension array of ints "order"
-int * mergeSort(char *arr[], int ValidRowCount) {
+int * mergeSort(char *arr[], int ValidRowCount, char* sortColType, int colIndex) {
+	colIdx = colIndex;
+	colType = sortColType;
 	int i,left,right,k,l;
 	char **unsorted = malloc(sizeof(char *) * ValidRowCount);
 	for (i = 0; i < ValidRowCount; i++) {
