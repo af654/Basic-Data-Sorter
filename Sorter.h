@@ -15,6 +15,7 @@ int findType(char* token);
 int * mergeSort(char *arr[], int ValidRowCount);
 void sort(char *arr[], int left, int right);
 void merging(char *arr[], int left, int middle, int right);
+long doCompare(rowType *row1, rowType *row2);
     
 const char* validColumns[] = {
     "color",
