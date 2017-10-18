@@ -58,17 +58,6 @@ int main(int argc, char* argv[]) {
 
         //Walk through other tokens on the line
         while(token) {
-            int input_type = findType(token);
-
-            if(input_type == 0) { //Input is an integer
-
-            } else if (input_type == 1 ) { //Input is a string
-                
-            } else if (input_type == 2){ //Input is a double
-
-            } else { //Input is not a valid type
-
-            }
             
             //If the value we are reading in is Null, we want to replace it with the string "<EMPTY>"
             value = *token ? token : "<EMPTY>";
