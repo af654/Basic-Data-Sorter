@@ -68,7 +68,8 @@ void merging(char *arr[],int left, int middle, int right) {
 	
    for(first = left, second = middle + 1, i = left; first <= middle && second <= right; i++) {
 	//use strcmp with doubles, ints, and strings
-    if(strcmp(tolower(arr[first]),tolower(arr[second])) <= 0) {
+    //if(strcmp(tolower(arr[first]),tolower(arr[second])) <= 0) {
+    if(compare(arr[first], unsorted[second]) <= 0) {
 		temp[i] = arr[first++]; 			
 	} else {
 		temp[i] = arr[second++]; 						
@@ -87,4 +88,38 @@ void merging(char *arr[],int left, int middle, int right) {
 		arr[i]= temp[i];
 	}
 
+}
+
+long compare(rowType *row1, rowType *row2)
+{
+    const char* r1Value = row1->colEntries[colIdx].value;
+    const char* r2Value = row2->colEntries[colIdx].value;
+    
+    if (strcmp(colType, "char") == 0) {
+        // if the value starts with a quote advancee to the next character
+        if (*r1Value == '"') {
+            r1Value++;
+        }
+        if (*r2Value == '"') {
+            r2Value++;
+        }
+        return(strcmp(r1Value, r2Value));
+    }
+    else if (strcmp(colType, "int") == 0){
+                int i1Value = atoi(r1Value);
+                int i2Value = atoi(r2Value);
+                return (i1Value - i2Value);
+    } else if (strcmp(colType, "long") == 0) {
+                long l1Value = atol(r1Value);
+                long l2Value = atol(r2Value);
+                return (l1Value - l2Value);
+    }
+    else if (strcmp(colType, "float") == 0) {
+                float f1Value = atof(r1Value);
+                float f2Value = atof(r2Value);
+                return (f1Value - f2Value);
+    } else {
+        //fprintf(stderr, "Unknown colType: %s\n", colType);
+        exit(1);
+    }
 }
