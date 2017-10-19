@@ -8,7 +8,7 @@ char *temp[5044];
 //int colIdx;
 
 //declare mergeSort returning a pointer to a single-dimension array of ints "order"
-int * mergeSort(char *arr[], int ValidRowCount, char* sortColType, int colIndex) {
+int * mergeSort(char *arr[], int ValidRowCount) {
 	//colIdx = colIndex;
 	//colType = sortColType;
 	int i,left,right,k,l;
