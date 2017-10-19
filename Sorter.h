@@ -12,7 +12,7 @@ char* strtok_single(char* str, char const* delims);
 int findType(char* token);
 
 //Suggestion: prototype a mergesort function
-int * mergeSort(char *arr[], int ValidRowCount, char* sortColType, int colIndex);
+int * mergeSort(char *arr[], int ValidRowCount);
 void sort(char *arr[], int left, int right);
 void merging(char *arr[], int left, int middle, int right);
 long compare(char *arr[], char *unsortedarr[], first, second);
