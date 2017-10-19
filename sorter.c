@@ -86,7 +86,9 @@ int main(int argc, char* argv[]) {
     //now we should have the order for how to sort the rows
     //mergesort input: char data array for data in column specified
     //mergesort output: int order array for how to move rows around
-    properOrder = mergeSort(datatosort, ValidRowCount - 1);
+    //int * mergeSort(char *arr[], int ValidRowCount, char* sortColType, int colIndex)
+    char* sortColType = getSortColType(int column_number_to_sort);
+    properOrder = mergeSort(datatosort, ValidRowCount - 1, sortColType, column_number_to_sort);
     
     //print top bar to CSV
     printf("color,director_name,num_critic_for_reviews,duration,director_facebook_likes,actor_3_facebook_likes,actor_2_name,actor_1_facebook_likes,gross,genres,actor_1_name,movie_title,num_voted_users,cast_total_facebook_likes,actor_3_name,facenumber_in_poster,plot_keywords,movie_imdb_link,num_user_for_reviews,language,country,content_rating,budget,title_year,actor_2_facebook_likes,imdb_score,aspect_ratio,movie_facebook_likes\n");
@@ -109,6 +111,71 @@ void printRowToCSV(struct Row *correctRow, int rowIndex) {
         printf(",");
     } 
     printf("%s", getSingleRowValues(correctRow, c));    
+}
+
+//get type for column
+char* getSortColType(int column_number){
+    Type columnType;
+    switch (column_number){
+        case 0:
+            return columnType.string;
+        case 1:
+            return columnType.string;
+        case 2:
+            return columnType.integer;
+        case 3:
+            return columnType.integer;
+        case 4:
+            return columnType.integer;
+        case 5:
+            return columnType.integer;
+        case 6:
+            return columnType.string;
+        case 7:
+            return columnType.integer;
+        case 8:
+            return columnType.longy;
+        case 9:
+            return columnType.string;
+        case 10:
+            return columnType.string;
+        case 11:
+            return columnType.string;
+        case 12:
+            return columnType.integer;
+        case 13:
+            return columnType.integer;
+        case 14:
+            return columnType.string;    
+        case 15:
+            return columnType.integer;    
+        case 16:
+            return columnType.string;    
+        case 17:
+            return columnType.string;    
+        case 18:
+            return columnType.integer;    
+        case 19:
+            return columnType.string;    
+        case 20:
+            return columnType.string;    
+        case 21:
+            return columnType.string;    
+        case 22:
+            return columnType.longy;    
+        case 23:
+            return columnType.integer;    
+        case 24:
+            return columnType.integer;    
+        case 25:
+            return columnType.floaty;    
+        case 26:
+            return columnType.floaty;    
+        case 27:
+            return columnType.integer;    
+        default:
+            return columnType.string;
+    }
 }
 
 //This first overload will work on a single row, and return the assignments for that row
