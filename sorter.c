@@ -87,7 +87,8 @@ int main(int argc, char* argv[]) {
     //mergesort input: char data array for data in column specified
     //mergesort output: int order array for how to move rows around
     //int * mergeSort(char *arr[], int ValidRowCount, char* sortColType, int colIndex)
-    char* sortColType = getSortColType(int column_number_to_sort);
+    //char* sortColType = getSortColType(int column_number_to_sort);
+    //still need to define sortColType - need to figure out how to get the types 
     properOrder = mergeSort(datatosort, ValidRowCount - 1, sortColType, column_number_to_sort);
     
     //print top bar to CSV
@@ -111,71 +112,6 @@ void printRowToCSV(struct Row *correctRow, int rowIndex) {
         printf(",");
     } 
     printf("%s", getSingleRowValues(correctRow, c));    
-}
-
-//get type for column
-char* getSortColType(int column_number){
-    Type columnType;
-    switch (column_number){
-        case 0:
-            return columnType.string;
-        case 1:
-            return columnType.string;
-        case 2:
-            return columnType.integer;
-        case 3:
-            return columnType.integer;
-        case 4:
-            return columnType.integer;
-        case 5:
-            return columnType.integer;
-        case 6:
-            return columnType.string;
-        case 7:
-            return columnType.integer;
-        case 8:
-            return columnType.longy;
-        case 9:
-            return columnType.string;
-        case 10:
-            return columnType.string;
-        case 11:
-            return columnType.string;
-        case 12:
-            return columnType.integer;
-        case 13:
-            return columnType.integer;
-        case 14:
-            return columnType.string;    
-        case 15:
-            return columnType.integer;    
-        case 16:
-            return columnType.string;    
-        case 17:
-            return columnType.string;    
-        case 18:
-            return columnType.integer;    
-        case 19:
-            return columnType.string;    
-        case 20:
-            return columnType.string;    
-        case 21:
-            return columnType.string;    
-        case 22:
-            return columnType.longy;    
-        case 23:
-            return columnType.integer;    
-        case 24:
-            return columnType.integer;    
-        case 25:
-            return columnType.floaty;    
-        case 26:
-            return columnType.floaty;    
-        case 27:
-            return columnType.integer;    
-        default:
-            return columnType.string;
-    }
 }
 
 //This first overload will work on a single row, and return the assignments for that row
