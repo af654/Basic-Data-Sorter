@@ -73,7 +73,7 @@ void merging(char *arr[],int left, int middle, int right) {
    for(first = left, second = middle + 1, i = left; first <= middle && second <= right; i++) {
 	//use strcmp with doubles, ints, and strings
     //if(strcmp(tolower(arr[first]),tolower(arr[second])) <= 0) {
-    if(compare(arr[first], unsorted[second]) <= 0) {
+    if(compare(tolower(arr[first]), tolower(unsorted[second])) <= 0) {
 		temp[i] = arr[first++]; 			
 	} else {
 		temp[i] = arr[second++]; 						
@@ -94,10 +94,10 @@ void merging(char *arr[],int left, int middle, int right) {
 
 }
 
-long compare(rowType *row1, rowType *row2)
+long compare(char *arr[], char *unsortedarr[], first, second)
 {
-    const char* r1Value = row1->colEntries[colIdx].value;
-    const char* r2Value = row2->colEntries[colIdx].value;
+    const char* r1Value = arr[first];
+    const char* r2Value = unsorted[second];
     
     if (strcmp(colType, "char") == 0) {
         // if the value starts with a quote advancee to the next character
