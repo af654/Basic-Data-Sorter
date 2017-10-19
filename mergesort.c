@@ -4,13 +4,13 @@
 
 int order[5044];
 char *temp[5044];
-char* colType;
-int colIdx;
+//char* colType;
+//int colIdx;
 
 //declare mergeSort returning a pointer to a single-dimension array of ints "order"
 int * mergeSort(char *arr[], int ValidRowCount, char* sortColType, int colIndex) {
-	colIdx = colIndex;
-	colType = sortColType;
+	//colIdx = colIndex;
+	//colType = sortColType;
 	int i,left,right,k,l;
 	char **unsorted = malloc(sizeof(char *) * ValidRowCount);
 	for (i = 0; i < ValidRowCount; i++) {
@@ -72,8 +72,8 @@ void merging(char *arr[],int left, int middle, int right) {
 	
    for(first = left, second = middle + 1, i = left; first <= middle && second <= right; i++) {
 	//use strcmp with doubles, ints, and strings
-    //if(strcmp(tolower(arr[first]),tolower(arr[second])) <= 0) {
-    if(compare(arr[], unsortedarr[], first, second) <= 0) {
+    if(strcmp(tolower(arr[first]),tolower(arr[second])) <= 0) {
+    //if(compare(arr[], unsortedarr[], first, second) <= 0) {
 		temp[i] = arr[first++]; 			
 	} else {
 		temp[i] = arr[second++]; 						
@@ -94,6 +94,7 @@ void merging(char *arr[],int left, int middle, int right) {
 
 }
 
+/*
 long compare(char *arr[], char *unsortedarr[], first, second)
 {
     const char* r1Value = arr[first];
